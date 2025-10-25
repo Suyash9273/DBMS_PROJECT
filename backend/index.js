@@ -7,8 +7,9 @@ import cookieParser from 'cookie-parser';
 
 // --- Import all our routes ---
 import userRoutes from './routes/userRoutes.js';
-import trainRoutes from './routes/trainRoutes.js'; // <-- Add this
-import stationRoutes from './routes/stationRoutes.js'; // <-- Add this
+import trainRoutes from './routes/trainRoutes.js';
+import stationRoutes from './routes/stationRoutes.js';
+import routeRoutes from './routes/routeRoutes.js'
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
 app.use('/api/users', userRoutes);
 app.use('/api/trains', trainRoutes);
 app.use('/api/stations', stationRoutes);
+app.use('/api/routes', routeRoutes);
 
 // Function to start the server: -> 
 const startServer = async () => {
