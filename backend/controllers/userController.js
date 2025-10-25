@@ -82,4 +82,32 @@ const registerUser = async (req, res) => {
     }
  }
 
- export {registerUser, loginUser};
+ /**
+  * @desc Get user profile
+  * @route Get: /api/users/profile
+  * @access Private
+  */
+const getUserProfile = (req, res) => {
+    // req.user is attached by our protect middleware
+    const user = {
+        id: req.user.id,
+        name: req.user.name,
+        email: req.user.email
+    }
+    res.status(200).json(user);
+}
+
+/**
+ * @desc Logout user
+ * @route POST /api/users/logout
+ * @access Public
+ */
+const logoutUser = (req, res) => {
+    res.cookie('jwt', '', {
+        httpOnly: true,
+        expires: new Date(0)
+    });
+    res.status(200).json({message: 'Logged out successfully'});
+}
+
+ export {registerUser, loginUser, getUserProfile, logoutUser};
