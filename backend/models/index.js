@@ -61,6 +61,17 @@ Route.belongsTo(Station, {
     foreignKey: 'station_id'
 });
 
+//6.Train <-> Booking (One to Many) One train can have many bookings
+Train.hasMany(Booking, {
+    foreignKey: 'train_id',
+    onDelete: 'SET NULL'
+})
+
+Booking.belongsTo(Train, {
+    foreignKey: 'train_id'
+})
+
+
 // Export All Models : -> 
 // We export all models and then sequelize instance from this one file
 

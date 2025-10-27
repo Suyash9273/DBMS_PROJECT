@@ -9,7 +9,8 @@ import cookieParser from 'cookie-parser';
 import userRoutes from './routes/userRoutes.js';
 import trainRoutes from './routes/trainRoutes.js';
 import stationRoutes from './routes/stationRoutes.js';
-import routeRoutes from './routes/routeRoutes.js'
+import routeRoutes from './routes/routeRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -28,6 +29,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/trains', trainRoutes);
 app.use('/api/stations', stationRoutes);
 app.use('/api/routes', routeRoutes);
+app.use('/api/bookings', bookingRoutes);
 
 // Function to start the server: -> 
 const startServer = async () => {
