@@ -1,4 +1,4 @@
-import { Booking, Passenger, Train, sequelize } from "../models/index.js";
+import { Booking, Passenger, Train, sequelize, User, Station, Route } from "../models/index.js";
 import generatePNR from "../utils/generatePNR.js";
 import { Op } from "sequelize";
 /**
@@ -112,7 +112,7 @@ const createBooking = async (req, res) => {
             }
         ));
 
-        await Passenger.bulkCreate(passengerData, {transaction: t});
+        await Passenger.bulkCreate(passengerData, { transaction: t });
 
         //3. If everything is successful, commit the transaction
 
@@ -129,4 +129,113 @@ const createBooking = async (req, res) => {
     }
 }
 
-export {checkAvailability, createBooking};
+/**
+ * @desc Get all bookings for the logged in users
+ * @route Get /api/bookings/mybookings
+ * @access Private
+ */
+
+const getMyBookings = async (req, res) => {
+    try {
+        const bookings = await Booking.findAll({
+            where: { user_id: req.user.id },
+            include: [
+                {
+                    model: Passenger, // Include passenger for each booking(join)
+                },
+                {
+                    model: Train, // Include(Join) train details
+                }
+            ],
+            order: [['travel_date', 'DESC']] // show most recent ones first
+        })
+
+        res.status(200).json(bookings);
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+/**
+ * @desc Get booking details by PNR number
+ * @route Get /api/bookings/pnr/:pnr
+ * @access Public
+ */
+
+const getBookingByPNR = async (req, res) => {
+    const { pnr } = req.params;
+
+    try {
+        const booking = await Booking.findOne({
+            where: { pnr_number: pnr },
+            include: [
+                {
+                    model: Passenger,
+                },
+                {
+                    model: Train,
+                    include: [
+                        {
+                            model: Route,
+                            include: [Station]
+                        }
+                    ],
+                },
+                {
+                    model: User, // Include user details but hide password
+                    attributes: ['name', 'email']
+                }
+            ],
+            order: [[Train, Route, 'stop_number', 'ASC']],
+        });
+
+        if (booking) {
+            res.status(200).json(booking);
+        } else {
+            res.status(404).json({ message: 'Booking not found for this PNR' });
+        }
+
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+}
+
+/**
+ * @desc    Cancel a booking
+ * @route   PUT /api/bookings/cancel/:id
+ * @access  Private
+ */
+const cancelBooking = async (req, res) => {
+    const {id: bookingId} = req.params;
+    const userId = req.user.id;
+
+    try {
+        const booking = await Booking.findByPk(bookingId);
+
+        if(!booking){
+            return res.status(404).json({message: 'Booking not found'})
+        }
+
+        // Check if the booking belongs to the logged in user
+        if(booking.user_id !== userId) {
+            return res.status(401).json({message: 'Not Authorized'})
+        }
+
+        //Check if booking is already cancelled or is still pending
+        if(booking.booking_status === 'CANCELLED') {
+            return res.status(400).json({message: 'Booking is already cancelled'});
+        }
+
+        booking.booking_status = 'CANCELLED';
+
+        await booking.save();
+
+        res.status(200).json({message: "Booking cancelled successfuly",
+             booking});
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+export { checkAvailability, createBooking, getMyBookings, getBookingByPNR, cancelBooking };
