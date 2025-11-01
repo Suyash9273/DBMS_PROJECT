@@ -11,7 +11,7 @@ import SearchResultsPage from './pages/SearchResultsPage.jsx';
 
 const App = () => {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen min-w-screen flex-col bg-gray-300">
       <Header />
       <main className="flex-grow py-6">
         <div className="container mx-auto">
@@ -30,4 +30,3 @@ const App = () => {
 };
 
 export default App;
-

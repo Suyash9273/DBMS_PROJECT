@@ -1,4 +1,4 @@
-import react from 'react'
+import react from 'react';
 
 const Header = () => {
     return (
@@ -9,13 +9,13 @@ const Header = () => {
                 <nav>
                     <ul className='flex space-x-4'>
                         <li>
-                            <a href='/login' className='hover:text-gray-300'>
+                            <a href='/login' className='bg-[#FB923C] text-md font-bold px-3 py-0.5 rounded-2xl hover:bg-blue-700 transition duration-100'>
                             Login
                             </a>
                         </li>
 
                         <li>
-                            <a href='/register' className='hover:text-gray-300'>
+                            <a href='/register' className='bg-[#FB923C] text-md font-bold px-3 py-0.5 rounded-2xl hover:bg-blue-700 transition duration-100'>
                             Sign-Up
                             </a>
                         </li>

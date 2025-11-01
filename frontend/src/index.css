@@ -118,3 +118,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.Orange-Transition {
+  @apply hover:bg-[#FF5722] hover:shadow-[0_0_15px_rgba(255,87,34,0.6)] transition-all duration-100 ease-in-out rounded-xl
+}
