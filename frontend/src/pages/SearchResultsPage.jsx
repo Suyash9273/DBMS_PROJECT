@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom';
+import axios from 'axios';
 import {
   Card,
   CardContent,
@@ -17,44 +18,98 @@ const SearchResultsPage = () => {
   const to = searchParams.get('to');
   const date = searchParams.get('date');
 
+  //1. setting up state:->
+  const [trains, setTrains] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  //2. Fetch the data when the component loads :-> 
+  useEffect(() => {
+    const fetchTrains = async () => {
+      try {
+        setIsLoading(true);
+        setError(null); 
+
+        const response = await axios.get(
+          `/api/trains/search?from=${from}&to=${to}`
+        );
+        
+        setTrains(response.data); 
+      } catch (err) {
+        setError(err.response?.data?.message || 'An error occurred');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTrains();
+  }, [from, to]);
+
+  //3. Setting Loading state
+  if(isLoading) {
+    return <div className='text-center'>Searching for trains...</div>
+  }
+
+  //4. Render error state
+  if(error) {
+    return <div className='text-center text-red-500'>{error}</div>
+  }
+
+  //5. Render results: ->
+
   return (
-    <div className='bg-gray-200'>
+    <div>
       <h1 className='text-3xl font-bold mb-4'>
-        Search Result for: {from} to {to}
+        Search results for: {from} to {to}
       </h1>
 
-      <h2 className='text-xl text-muted-foreground mb-6'>
-        Date: {date}
-      </h2>
-      {/* This is a placeholder card. We will map over API results later. */}
-      <Card className="mx-auto my-auto">
-        <CardHeader>
-          <CardTitle>Rajdhani Express (12001)</CardTitle>
-          <CardDescription>Departs: 17:00 | Arrives: 08:00</CardDescription>
-        </CardHeader>
+      <h2 className='text-xl text-muted-foreground mb-6'></h2>
 
-        <CardContent>
-          <div className="flex justify-between">
-            <div>
-              <p className="font-bold">Sleeper</p>
-              <p>120 available</p>
-            </div>
-            <div>
-              <p className="font-bold">AC</p>
-              <p>50 available</p>
-            </div>
-            <div>
-              <p className="font-bold">Fare</p>
-              <p>Rs. 2500</p>
-            </div>
-          </div>
-        </CardContent>
+      {
+        trains.length == 0 ? (
+          <p className='text-center'>Cannot find trains for this route...</p>
+        ) : (
+          trains.map((train) => {
+            return (<Card key={train.id}className={`mb-4`}>
+              <CardHeader>
+                <CardTitle>
+                  {train.train_name} ({train.train_number})
+                </CardTitle>
 
-        <CardFooter>
-          <Button className="w-full">Book Now</Button>
-        </CardFooter>
+                <CardDescription>
+                 {/* Finding 'from' and 'to' stations in this train's route  */}
+                Departs: {train.Routes.find(r => r.Station.station_code === from)?.departure_time}
+                Arrives: {train.Routes.find(r => r.Station.station_code === to)?.arrival_time}
+                </CardDescription>
+              </CardHeader>
 
-      </Card>
+              <CardContent>
+                <div className='flex justify-between'>
+                  <div>
+                    <p className='font-bold'>Sleeper</p>
+                    <p>{train.total_seats_sleeper} seats</p>
+                  </div>
+
+                  <div>
+                    <p className='font-bold'>AC</p>
+                    <p>{train.total_seats_ac} seats</p>
+                  </div>
+
+                  <div>
+                    <p className='font-bold'>Fare</p>
+                    <p>Rs. 2500</p> {/* We will make this dynamic later */}
+                  </div>
+                </div>
+              </CardContent>
+
+              <CardFooter>
+                <Button className={`w-full`}>Book Now</Button>
+              </CardFooter>
+
+            </Card>);
+          })
+        )
+      }
     </div>
   )
 }

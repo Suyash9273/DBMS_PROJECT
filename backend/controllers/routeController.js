@@ -36,7 +36,7 @@ const addRoute = async (req, res) => {
             stop_number
         });
 
-        res.status(401).json(route);
+        res.status(200).json(route);
     } catch (error) {
         res.status(400).json({message: error.message});
     }
