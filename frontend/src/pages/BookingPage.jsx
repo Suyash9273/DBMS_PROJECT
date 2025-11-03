@@ -118,9 +118,11 @@ const BookingPage = () => {
     //5. Render the form
 
     return (
-        <Card>
 
-            <CardHeader>
+        <div className='flex justify-center items-center'>
+            <Card className={`max-w-lg mx-5`}>
+
+            <CardHeader className={`text-xl font-bold`}>
                 <CardTitle>Book Tickets for {train.train_name} ({train.train_number})</CardTitle>
                 <p>Date: {date}</p>
                 <p>Seats Available: AC ({availability.availableAC}), Sleeper ({availability.availableSleeper})</p>
@@ -131,7 +133,7 @@ const BookingPage = () => {
                     <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
                         {
                             fields.map((item, index) => (
-                                <div key={item.id} className='p-4 border rounded-md space-y-4 relative'>
+                                <div key={item.id} className='p-4 border-2 rounded-md space-y-4 relative border-gray-400'>
 
                                     <h3 className='font-semibold'>Passenger {index + 1}</h3>
                                     {/**Passenger Name */}
@@ -141,7 +143,7 @@ const BookingPage = () => {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Full Name</FormLabel>
-                                                <FormControl><Input placeholder="John Doe" {...field} /></FormControl>
+                                                <FormControl><Input placeholder="Name" {...field} /></FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
@@ -201,9 +203,8 @@ const BookingPage = () => {
                                     {/* Remove Button */}
                                     <Button
                                         type="button"
-                                        variant="destructive"
                                         size="icon"
-                                        className="absolute top-2 right-2"
+                                        className="absolute top-2 right-2 bg-red-400 hover:bg-red-600"
                                         onClick={() => remove(index)}
                                         disabled={fields.length <= 1}
                                     >
@@ -216,11 +217,10 @@ const BookingPage = () => {
                         {/* Add Passenger Button */}
                         <Button
                             type="button"
-                            variant="outline"
-                            className="w-full"
+                            className="w-full bg-gray-200 text-black hover:bg-gray-300"
                             onClick={() => append({ passenger_name: '', age: '', gender: '', seat_class: '' })}
                         >
-                            <PlusCircle className="mr-2 h-4 w-4" /> Add Passenger
+                            <PlusCircle className="mr-2 h-4 w-4 "/> Add Passenger
                         </Button>
 
                         <Button type="submit" className="w-full text-lg">
@@ -232,6 +232,7 @@ const BookingPage = () => {
             </CardContent>
 
         </Card>
+        </div>
     )
 }
 

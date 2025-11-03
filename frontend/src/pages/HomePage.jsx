@@ -134,7 +134,7 @@ const HomePage = () => {
           }
           />
 
-          <Button type="submit" className="w-full text-black text-md font-bold bg-[#FB923C] Orange-Transition">
+          <Button type="submit" className="w-full text-black text-md bg-[#FB923C] Orange-Transition">
             Search Trains
           </Button>
         </form>
