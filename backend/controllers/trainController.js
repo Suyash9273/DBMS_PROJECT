@@ -109,4 +109,31 @@ const searchTrains = async (req, res) => {
     }
 }
 
-export {addTrain, searchTrains};
+/**
+ * @desc    Get a single train by its ID
+ * @route   GET /api/trains/:id
+ * @access  Public
+ */
+const getTrainById = async (req, res) => {
+  try {
+    const train = await Train.findByPk(req.params.id, {
+      include: [
+        {
+          model: Route,
+          include: [Station],
+        },
+      ],
+      order: [[Route, 'stop_number', 'ASC']],
+    });
+
+    if (train) {
+      res.status(200).json(train);
+    } else {
+      res.status(404).json({ message: 'Train not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export {addTrain, searchTrains, getTrainById};

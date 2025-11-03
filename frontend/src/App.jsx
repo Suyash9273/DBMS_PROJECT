@@ -8,6 +8,8 @@ import HomePage from './pages/HomePage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import SearchResultsPage from './pages/SearchResultsPage.jsx';
+import BookingPage from './pages/BookingPage.jsx';
+import MyBookingsPage from './pages/MyBookingsPage.jsx';
 
 const App = () => {
   return (
@@ -21,6 +23,9 @@ const App = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/search" element={<SearchResultsPage />} />
+
+            <Route path="/book/:trainId" element={<BookingPage />} />
+            <Route path="/mybookings" element={<MyBookingsPage />} />
           </Routes>
         </div>
       </main>

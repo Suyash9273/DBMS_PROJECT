@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {useForm} from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate, useSearchParams} from 'react-router-dom';
 //Import shadcn components
 import {Button} from '@/components/ui/button';
 import { FcGoogle } from "react-icons/fc";
+import { useAuth } from '@/context/AuthContext';
+import axios from 'axios';
 
 
 import {
@@ -27,6 +29,13 @@ const formSchema = z.object({
 })
 
 const LoginPage = () => {
+
+  const navigate = useNavigate();
+  const {login} = useAuth();
+  const [error, setError] = useState(null);
+  const [searchParams] = useSearchParams();
+  const redirectPath = searchParams.get('redirect') || '/';
+
   //1. Define the form
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -37,9 +46,19 @@ const LoginPage = () => {
   });
 
   //2. Define a submit handler
-  function onSubmit(values) {
-    //We will connect this to our API
-    console.log("Login values: -> ", values);
+  const onSubmit = async (values) => {
+    setError(null); //clear any previous errors
+    try {
+      const response = await axios.post('/api/users/login', values);//calling backend api to check login credentials
+
+      //calling context login fn to set userData in localStorage
+      login(response.data);
+
+      //Navigate to redirect path or home
+      navigate(redirectPath);
+    } catch (error) {
+      setError(error.response?.data?.message || 'Login failed. Please try again');
+    }
   }
 
   return (

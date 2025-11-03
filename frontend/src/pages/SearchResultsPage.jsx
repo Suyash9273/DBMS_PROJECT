@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
   Card,
@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 const SearchResultsPage = () => {
 
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const from = searchParams.get('from');
   const to = searchParams.get('to');
   const date = searchParams.get('date');
@@ -28,13 +29,13 @@ const SearchResultsPage = () => {
     const fetchTrains = async () => {
       try {
         setIsLoading(true);
-        setError(null); 
+        setError(null);
 
         const response = await axios.get(
           `/api/trains/search?from=${from}&to=${to}`
         );
-        
-        setTrains(response.data); 
+
+        setTrains(response.data);
       } catch (err) {
         setError(err.response?.data?.message || 'An error occurred');
       } finally {
@@ -45,13 +46,17 @@ const SearchResultsPage = () => {
     fetchTrains();
   }, [from, to]);
 
+  const handleBookNow = (trainId) => {
+    navigate(`/book/${trainId}?date=${date}`);
+  }
+
   //3. Setting Loading state
-  if(isLoading) {
+  if (isLoading) {
     return <div className='text-center'>Searching for trains...</div>
   }
 
   //4. Render error state
-  if(error) {
+  if (error) {
     return <div className='text-center text-red-500'>{error}</div>
   }
 
@@ -70,16 +75,16 @@ const SearchResultsPage = () => {
           <p className='text-center'>Cannot find trains for this route...</p>
         ) : (
           trains.map((train) => {
-            return (<Card key={train.id}className={`mb-4`}>
+            return (<Card key={train.id} className={`mb-4`}>
               <CardHeader>
                 <CardTitle>
                   {train.train_name} ({train.train_number})
                 </CardTitle>
 
                 <CardDescription>
-                 {/* Finding 'from' and 'to' stations in this train's route  */}
-                Departs: {train.Routes.find(r => r.Station.station_code === from)?.departure_time}
-                Arrives: {train.Routes.find(r => r.Station.station_code === to)?.arrival_time}
+                  {/* Finding 'from' and 'to' stations in this train's route  */}
+                  Departs: {train.Routes.find(r => r.Station.station_code === from)?.departure_time}
+                  Arrives: {train.Routes.find(r => r.Station.station_code === to)?.arrival_time}
                 </CardDescription>
               </CardHeader>
 
@@ -103,7 +108,9 @@ const SearchResultsPage = () => {
               </CardContent>
 
               <CardFooter>
-                <Button className={`w-full`}>Book Now</Button>
+                <Button className={`w-full`} onClick={() => handleBookNow(train.id)}>
+                  Book Now
+                </Button>
               </CardFooter>
 
             </Card>);

@@ -1,10 +1,11 @@
 // frontend/src/pages/RegisterPage.jsx
-
-import React from 'react';
+import axios from 'axios';
+import React, {useState} from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';// <-- Import useAuth
 
 // Import shadcn components
 import { Button } from '@/components/ui/button';
@@ -29,6 +30,12 @@ const formSchema = z.object({
 });
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
+  const {login} = useAuth(); //<-- Get the login function
+
+  const [error, setError] = useState(null);
+
+
   // 1. Define the form
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -40,9 +47,17 @@ const RegisterPage = () => {
   });
 
   // 2. Define a submit handler
-  function onSubmit(values) {
-    // We will connect this to our API
-    console.log('Register values:', values);
+  const onSubmit = async (values) => {
+    setError(null);
+    try {
+      //Call the backend api
+      const response = await axios.post('/api/users/register', values);
+
+      login(response.data);
+      navigate('/');
+    } catch (error) {
+      setError(err.response?.data?.message || 'Registration failed.');
+    }
   }
 
   return (
