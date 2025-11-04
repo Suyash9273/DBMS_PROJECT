@@ -10,6 +10,7 @@ import RegisterPage from './pages/RegisterPage.jsx';
 import SearchResultsPage from './pages/SearchResultsPage.jsx';
 import BookingPage from './pages/BookingPage.jsx';
 import MyBookingsPage from './pages/MyBookingsPage.jsx';
+import PNRStatusPage from './pages/PNRStatusPage.jsx';
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
 
             <Route path="/book/:trainId" element={<BookingPage />} />
             <Route path="/mybookings" element={<MyBookingsPage />} />
+            <Route path="/pnr-status" element={<PNRStatusPage />} />
           </Routes>
         </div>
       </main>

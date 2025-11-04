@@ -24,9 +24,14 @@ const Header = () => {
                 <div>
                     <Link to='/' className='text-xl font-bold h-2 hover:bg-gray-600 px-2 py-2 rounded-md'>Railway Reservation</Link>
                 </div>
-                
+
                 <nav>
                     <ul className='flex items-center gap-4'>
+                        <li>
+                            <Link to="/pnr-status" className="hover:bg-gray-600 px-2 py-2 rounded-md">
+                                PNR Status
+                            </Link>
+                        </li>
                         {
                             userInfo ? (
                                 <>
@@ -48,13 +53,13 @@ const Header = () => {
                                 </>
                             ) : (
                                 <>
-                                <li>
-                                    <Link to='/login' className='bg-[#FB923C] text-md px-3 py-1 rounded-2xl hover:bg-blue-700 transition duration-100'>
-                                    Login</Link>
-                                </li>
-                                <li>
-                                    <Link to='/register' className='bg-[#FB923C] text-md px-3 py-1 rounded-2xl hover:bg-blue-700 transition duration-100'>Sign Up</Link>
-                                </li>
+                                    <li>
+                                        <Link to='/login' className='bg-[#FB923C] text-md px-3 py-1 rounded-2xl hover:bg-blue-700 transition duration-100'>
+                                            Login</Link>
+                                    </li>
+                                    <li>
+                                        <Link to='/register' className='bg-[#FB923C] text-md px-3 py-1 rounded-2xl hover:bg-blue-700 transition duration-100'>Sign Up</Link>
+                                    </li>
                                 </>
                             )
                         }
