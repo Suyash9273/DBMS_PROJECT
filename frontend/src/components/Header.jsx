@@ -35,6 +35,14 @@ const Header = () => {
                         {
                             userInfo ? (
                                 <>
+                                    {userInfo.isAdmin && (
+                                        <li>
+                                            <Link to="/admin/trains" className="font-bold text-yellow-400 hover:text-yellow-200">
+                                                Admin Panel
+                                            </Link>
+                                        </li>
+                                    )}
+                                    
                                     <li>
                                         <span className='font-medium'>Welcome, {userInfo.name}</span>
                                     </li>

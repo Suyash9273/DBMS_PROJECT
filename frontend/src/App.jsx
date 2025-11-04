@@ -12,6 +12,12 @@ import BookingPage from './pages/BookingPage.jsx';
 import MyBookingsPage from './pages/MyBookingsPage.jsx';
 import PNRStatusPage from './pages/PNRStatusPage.jsx';
 
+import AdminRoute from './components/Admin/AdminRoute.jsx';
+import AdminDashboardPage from './pages/AdminDashboardPage.jsx';
+import ManageTrains from './components/Admin/ManageTrains.jsx';
+import ManageStations from './components/Admin/ManageStations.jsx';
+import ManageRoutes from './components/Admin/ManageRoutes.jsx';
+
 const App = () => {
   return (
     <div className="flex min-h-screen min-w-screen flex-col bg-gray-300">
@@ -28,6 +34,16 @@ const App = () => {
             <Route path="/book/:trainId" element={<BookingPage />} />
             <Route path="/mybookings" element={<MyBookingsPage />} />
             <Route path="/pnr-status" element={<PNRStatusPage />} />
+
+            {/**Admin Routes */}
+            <Route path="/admin" element={<AdminRoute />}>
+              <Route element={<AdminDashboardPage />}>
+                {/* Child routes of the dashboard */}
+                <Route path="trains" element={<ManageTrains />} />
+                <Route path="stations" element={<ManageStations />} />
+                <Route path="routes" element={<ManageRoutes />} />
+              </Route>
+            </Route>
           </Routes>
         </div>
       </main>

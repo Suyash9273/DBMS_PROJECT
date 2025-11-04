@@ -42,7 +42,7 @@ const protect = async (req, res, next) => {
 const admin = (req, res, next) => {
     //This middleware will run only after the protect one because it relies on 'req.user' being set We will add an 'isAdmin' field to our User model later. For now let's just check if user's name is admin
     //temporary soln for testing: -> 
-    if(req.user && req.user.name === 'Admin') {
+    if(req.user && req.user.isAdmin) {
         next();
     }
     else {

@@ -30,7 +30,13 @@ const User = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
             comment: 'Hashed password for the user'
-        }
+        },
+        isAdmin: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+            comment: 'Flag to identify admin users',
+        },
     },
     {
         //other model options go here
