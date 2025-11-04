@@ -63,7 +63,7 @@ const LoginPage = () => {
 
   return (
     <div className='flex justify-center items-center py-8'>
-      <Card className={`w-full max-w-[400px] px-3`}>
+      <Card className={`w-full max-w-[400px] px-3 shadow-md`}>
         <CardHeader>
           <CardTitle className={`text-3xl font-extrabold text-center`}>Login</CardTitle>
         </CardHeader>

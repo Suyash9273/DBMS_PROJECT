@@ -1,9 +1,9 @@
 // frontend/src/pages/MyBookingsPage.jsx
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import {Card, CardContent, CardHeader, CardTitle, CardDescription} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 import { Button } from '@/components/ui/button';
 
@@ -12,11 +12,11 @@ const MyBookingsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const {userInfo} = useAuth();
+  const { userInfo } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!userInfo) {
+    if (!userInfo) {
       navigate('/login');
     }
 
@@ -36,7 +36,7 @@ const MyBookingsPage = () => {
   }, [userInfo, navigate]);
 
   const handleCancelBooking = async (bookingId) => {
-    if(!window.confirm('Are you sure you want to cancel this booking?')) {
+    if (!window.confirm('Are you sure you want to cancel this booking?')) {
       return;
     }
 
@@ -44,10 +44,10 @@ const MyBookingsPage = () => {
       //Calling cancel api 
       await axios.put(`/api/bookings/cancel/${bookingId}`);
       //updating UI
-      setBookings((prevBookings) => 
+      setBookings((prevBookings) =>
         prevBookings.map((b) => {
           return (
-            b.id === bookingId? {...b, booking_status: 'CANCELLED'}: b
+            b.id === bookingId ? { ...b, booking_status: 'CANCELLED' } : b
           )
         })
       )
@@ -56,20 +56,20 @@ const MyBookingsPage = () => {
     }
   }
 
-  if(loading) return <div>Loading your bookings...</div>
-  if(error) return <div className='text-red-500'>{error}</div>
+  if (loading) return <div>Loading your bookings...</div>
+  if (error) return <div className='text-red-500'>{error}</div>
 
   return (
     <div>
       <h1 className='text-3xl font-bold mb-6'>My Bookings</h1>
       {
-        bookings.length === 0? (
+        bookings.length === 0 ? (
           <p>You have no bookings</p>
         ) : (
-          <div>
+          <div className='flex flex-col items-center gap-4'>
             {
               bookings.map((booking) => (
-                <Card key={booking.id}>
+                <Card key={booking.id} className={`min-w-lg`}>
                   <CardHeader>
                     <div className='flex justify-between items-start'>
 
@@ -81,10 +81,9 @@ const MyBookingsPage = () => {
                       </div>
 
                       <span className={
-                        `inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                          booking.booking_status === 'CONFIRMED'?
-                          'bg-green-600 text-white' : booking.booking_status === 
-                          'CANCELLED'? 'bg-red-600 text-white': 'bg-gray-200 text-gray-800'
+                        `inline-block px-3 py-1 rounded-full text-xs font-semibold ${booking.booking_status === 'CONFIRMED' ?
+                          'bg-green-600 text-white' : booking.booking_status ===
+                            'CANCELLED' ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-800'
                         }`
                       }>
                         {booking.booking_status}
@@ -100,9 +99,11 @@ const MyBookingsPage = () => {
                       <ul className='list-disc list-inside'>
                         {
                           booking.Passengers.map((p) => {
-                            <li key={p.id}>
-                              {p.passenger_name} ({p.age}, {p.gender}) - {p.seat_class}
-                            </li>
+                            return (
+                              <li key={p.id}>
+                                {p.passenger_name} ({p.age}, {p.gender}) - {p.seat_class}
+                              </li>
+                            )
                           })
                         }
                       </ul>
@@ -111,8 +112,8 @@ const MyBookingsPage = () => {
                     {
                       booking.booking_status !== 'CANCELLED' && (
                         <Button
-                        className={`mt-4`}
-                        onClick={() => handleCancelBooking(booking.id)}
+                          className={`mt-4`}
+                          onClick={() => handleCancelBooking(booking.id)}
                         >
                           Cancel Booking
                         </Button>

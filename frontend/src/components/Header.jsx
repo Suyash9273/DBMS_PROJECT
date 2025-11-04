@@ -21,9 +21,12 @@ const Header = () => {
     return (
         <header className='bg-gray-900 text-white shadow-md'>
             <div className='container mx-auto flex items-center justify-between p-4'>
-                <Link to='/' className='text-xl font-bold'>Railway Reservation</Link>
+                <div>
+                    <Link to='/' className='text-xl font-bold h-2 hover:bg-gray-600 px-2 py-2 rounded-md'>Railway Reservation</Link>
+                </div>
+                
                 <nav>
-                    <ul className='flex items-center space-x-4'>
+                    <ul className='flex items-center gap-4'>
                         {
                             userInfo ? (
                                 <>
@@ -31,7 +34,7 @@ const Header = () => {
                                         <span className='font-medium'>Welcome, {userInfo.name}</span>
                                     </li>
                                     <li>
-                                        <Link to='/mybookings' className='hover:text-gray-300'>My Bookings</Link>
+                                        <Link to='/mybookings' className='h-2 hover:bg-gray-600 px-2 py-2 rounded-md'>My Bookings</Link>
                                     </li>
                                     <li>
                                         <Button
@@ -46,11 +49,11 @@ const Header = () => {
                             ) : (
                                 <>
                                 <li>
-                                    <Link to='/login' className='hover:text-gray-300'>
+                                    <Link to='/login' className='bg-[#FB923C] text-md px-3 py-1 rounded-2xl hover:bg-blue-700 transition duration-100'>
                                     Login</Link>
                                 </li>
                                 <li>
-                                    <Link to='/register' className='hover:text-gray-300'>Sign Up</Link>
+                                    <Link to='/register' className='bg-[#FB923C] text-md px-3 py-1 rounded-2xl hover:bg-blue-700 transition duration-100'>Sign Up</Link>
                                 </li>
                                 </>
                             )

@@ -64,8 +64,8 @@ const SearchResultsPage = () => {
 
   return (
     <div>
-      <h1 className='text-3xl font-bold mb-4'>
-        Search results for: {from} to {to}
+      <h1 className='text-2xl font-semibold mb-4'>
+        Search results for: <span className='font-bold'>{from}</span> to <span className='font-bold'>{to}</span>
       </h1>
 
       <h2 className='text-xl text-muted-foreground mb-6'></h2>
@@ -75,45 +75,48 @@ const SearchResultsPage = () => {
           <p className='text-center'>Cannot find trains for this route...</p>
         ) : (
           trains.map((train) => {
-            return (<Card key={train.id} className={`mb-4`}>
-              <CardHeader>
-                <CardTitle>
-                  {train.train_name} ({train.train_number})
-                </CardTitle>
+            return (
+            <div key={train.id} className='flex justify-center items-center'>
+              <Card className={`mb-4 min-w-lg mx-5`}>
+                <CardHeader>
+                  <CardTitle>
+                    {train.train_name} ({train.train_number})
+                  </CardTitle>
 
-                <CardDescription>
-                  {/* Finding 'from' and 'to' stations in this train's route  */}
-                  Departs: {train.Routes.find(r => r.Station.station_code === from)?.departure_time}
-                  Arrives: {train.Routes.find(r => r.Station.station_code === to)?.arrival_time}
-                </CardDescription>
-              </CardHeader>
+                  <CardDescription>
+                    {/* Finding 'from' and 'to' stations in this train's route  */}
+                    Departs: {train.Routes.find(r => r.Station.station_code === from)?.departure_time}
+                    Arrives: {train.Routes.find(r => r.Station.station_code === to)?.arrival_time}
+                  </CardDescription>
+                </CardHeader>
 
-              <CardContent>
-                <div className='flex justify-between'>
-                  <div>
-                    <p className='font-bold'>Sleeper</p>
-                    <p>{train.total_seats_sleeper} seats</p>
+                <CardContent>
+                  <div className='flex justify-between'>
+                    <div>
+                      <p className='font-bold'>Sleeper</p>
+                      <p>{train.total_seats_sleeper} seats</p>
+                    </div>
+
+                    <div>
+                      <p className='font-bold'>AC</p>
+                      <p>{train.total_seats_ac} seats</p>
+                    </div>
+
+                    <div>
+                      <p className='font-bold'>Fare</p>
+                      <p>Rs. 2500</p> {/* We will make this dynamic later */}
+                    </div>
                   </div>
+                </CardContent>
 
-                  <div>
-                    <p className='font-bold'>AC</p>
-                    <p>{train.total_seats_ac} seats</p>
-                  </div>
+                <CardFooter>
+                  <Button className={`w-full`} onClick={() => handleBookNow(train.id)}>
+                    Book Now
+                  </Button>
+                </CardFooter>
 
-                  <div>
-                    <p className='font-bold'>Fare</p>
-                    <p>Rs. 2500</p> {/* We will make this dynamic later */}
-                  </div>
-                </div>
-              </CardContent>
-
-              <CardFooter>
-                <Button className={`w-full`} onClick={() => handleBookNow(train.id)}>
-                  Book Now
-                </Button>
-              </CardFooter>
-
-            </Card>);
+              </Card>
+            </div>);
           })
         )
       }
