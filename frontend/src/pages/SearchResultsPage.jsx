@@ -95,16 +95,25 @@ const SearchResultsPage = () => {
                     <div>
                       <p className='font-bold'>Sleeper</p>
                       <p>{train.total_seats_sleeper} seats</p>
+                      {
+                        train.total_seats_sleeper > 0 && (
+                          <p className='text-sm text-muted-foreground'>
+                            Rs. {train.fare_sleeper}
+                          </p>
+                        )
+                      }
                     </div>
 
                     <div>
                       <p className='font-bold'>AC</p>
                       <p>{train.total_seats_ac} seats</p>
-                    </div>
-
-                    <div>
-                      <p className='font-bold'>Fare</p>
-                      <p>Rs. 2500</p> {/* We will make this dynamic later */}
+                      {
+                        train.total_seats_ac > 0 && (
+                          <p className='text-sm text-muted-foreground'>
+                            Rs. {train.fare_ac}
+                          </p>
+                        )
+                      }
                     </div>
                   </div>
                 </CardContent>

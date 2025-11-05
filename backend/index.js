@@ -11,6 +11,7 @@ import trainRoutes from './routes/trainRoutes.js';
 import stationRoutes from './routes/stationRoutes.js';
 import routeRoutes from './routes/routeRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js'
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -30,6 +31,7 @@ app.use('/api/trains', trainRoutes);
 app.use('/api/stations', stationRoutes);
 app.use('/api/routes', routeRoutes);
 app.use('/api/bookings', bookingRoutes);
+app.use('/api/payments', paymentRoutes)
 
 // Function to start the server: -> 
 const startServer = async () => {

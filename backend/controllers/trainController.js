@@ -6,7 +6,7 @@ import { Op } from "sequelize";
  * @access Private(Admin)
  */
 const addTrain = async (req, res) => {
-    const {train_name, train_number, total_seats_sleeper, total_seats_ac} = req.body;
+    const {train_name, train_number, total_seats_sleeper, total_seats_ac, fare_sleeper, fare_ac} = req.body;
 
     try {
         const trainExists = await Train.findOne({where: {train_number}});

@@ -18,6 +18,9 @@ import ManageTrains from './components/Admin/ManageTrains.jsx';
 import ManageStations from './components/Admin/ManageStations.jsx';
 import ManageRoutes from './components/Admin/ManageRoutes.jsx';
 
+import PaymentPage from './pages/PaymentPage.jsx';
+import PaymentStatusPage from './pages/PaymentStatusPage.jsx';
+
 const App = () => {
   return (
     <div className="flex min-h-screen min-w-screen flex-col bg-gray-300">
@@ -44,6 +47,9 @@ const App = () => {
                 <Route path="routes" element={<ManageRoutes />} />
               </Route>
             </Route>
+
+            <Route path="/payment/:bookingId" element={<PaymentPage />} />
+            <Route path="/payment-status" element={<PaymentStatusPage />} />
           </Routes>
         </div>
       </main>

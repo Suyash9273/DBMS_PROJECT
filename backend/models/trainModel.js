@@ -27,7 +27,17 @@ const Train = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0,
-        }
+        },
+        fare_sleeper: {
+            type: DataTypes.DECIMAL(10, 2), // e.g., 500.00
+            allowNull: false,
+            defaultValue: 0.0,
+        },
+        fare_ac: {
+            type: DataTypes.DECIMAL(10, 2),
+            allowNull: false,
+            defaultValue: 0.0,
+        },
     },
 
     {

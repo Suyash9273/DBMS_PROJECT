@@ -84,9 +84,8 @@ const BookingPage = () => {
     // 4. Define Submit Handler
     const onSubmit = async (values) => {
     try {
-      // Mock fare calculation (e.g., Rs. 1500 per AC ticket, 500 per Sleeper)
       const total_fare = values.passengers.reduce((acc, p) => {
-        return acc + (p.seat_class === 'AC' ? 1500 : 500);
+        return acc + (p.seat_class === 'AC' ? train.fare_ac : train.fare_sleeper);
       }, 0);
 
       const bookingData = {
@@ -99,12 +98,8 @@ const BookingPage = () => {
       // Call the create booking API
       const response = await axios.post('/api/bookings', bookingData);
 
-      // We'll redirect to a payment page here (Day 17)
       alert(`Booking Pending! PNR: ${response.data.pnr_number}. Redirecting to payment...`);
-      // navigate(`/payment/${response.data.id}`);
-
-      navigate('/mybookings'); // For now, just go to "My Bookings"
-
+      navigate(`/payment/${response.data.id}`);
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.message || 'Booking failed');

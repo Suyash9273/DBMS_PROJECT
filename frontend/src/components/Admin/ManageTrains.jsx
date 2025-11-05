@@ -15,6 +15,8 @@ const formSchema = z.object({
   train_number: z.string().min(4, 'Train number is required'),
   total_seats_sleeper: z.coerce.number().min(0, 'Must be 0 or more'),
   total_seats_ac: z.coerce.number().min(0, 'Must be 0 or more'),
+  fare_sleeper: z.coerce.number().min(0, 'Fare is required'), 
+  fare_ac: z.coerce.number().min(0, 'Fare is required'),
 });
 
 const ManageTrains = () => {
@@ -28,6 +30,8 @@ const ManageTrains = () => {
       train_number: '',
       total_seats_sleeper: 0,
       total_seats_ac: 0,
+      fare_sleeper: 0, 
+      fare_ac: 0,
     },
   });
 
@@ -98,6 +102,29 @@ const ManageTrains = () => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="fare_sleeper"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Sleeper Fare (Rs.)</FormLabel>
+                  <FormControl><Input type="number" placeholder="500" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="fare_ac"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>AC Fare (Rs.)</FormLabel>
+                  <FormControl><Input type="number" placeholder="1500" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <Button type="submit" disabled={form.formState.isSubmitting}>
               {form.formState.isSubmitting ? 'Adding...' : 'Add Train'}
             </Button>
