@@ -89,7 +89,6 @@ const createBooking = async (req, res) => {
 
     // A transaction ensures that all queries succeed or fail together.
     //If creating a passenger fails, the booking will be rolled back.
-
     const t = await sequelize.transaction();
 
     try {
@@ -105,12 +104,11 @@ const createBooking = async (req, res) => {
 
         // 2. Create passenger records for this booking
 
-        const passengerData = passengers.map((p) => (
-            {
-                ...p,
-                booking_id: newBooking.id
-            }
-        ));
+        const passengerData = passengers.map((p) => ({
+            ...p,
+            age: parseInt(p.age, 10), // <-- This ensures age is an integer
+            booking_id: newBooking.id,
+        }));
 
         await Passenger.bulkCreate(passengerData, { transaction: t });
 
@@ -196,7 +194,7 @@ const getBookingByPNR = async (req, res) => {
         }
 
     } catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({ message: error.message });
     }
 }
 
@@ -206,32 +204,34 @@ const getBookingByPNR = async (req, res) => {
  * @access  Private
  */
 const cancelBooking = async (req, res) => {
-    const {id: bookingId} = req.params;
+    const { id: bookingId } = req.params;
     const userId = req.user.id;
 
     try {
         const booking = await Booking.findByPk(bookingId);
 
-        if(!booking){
-            return res.status(404).json({message: 'Booking not found'})
+        if (!booking) {
+            return res.status(404).json({ message: 'Booking not found' })
         }
 
         // Check if the booking belongs to the logged in user
-        if(booking.user_id !== userId) {
-            return res.status(401).json({message: 'Not Authorized'})
+        if (booking.user_id !== userId) {
+            return res.status(401).json({ message: 'Not Authorized' })
         }
 
         //Check if booking is already cancelled or is still pending
-        if(booking.booking_status === 'CANCELLED') {
-            return res.status(400).json({message: 'Booking is already cancelled'});
+        if (booking.booking_status === 'CANCELLED') {
+            return res.status(400).json({ message: 'Booking is already cancelled' });
         }
 
         booking.booking_status = 'CANCELLED';
 
         await booking.save();
 
-        res.status(200).json({message: "Booking cancelled successfuly",
-             booking});
+        res.status(200).json({
+            message: "Booking cancelled successfuly",
+            booking
+        });
 
     } catch (error) {
         res.status(500).json({ message: error.message });

@@ -11,15 +11,24 @@ import trainRoutes from './routes/trainRoutes.js';
 import stationRoutes from './routes/stationRoutes.js';
 import routeRoutes from './routes/routeRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
-import paymentRoutes from './routes/paymentRoutes.js'
+import paymentRoutes from './routes/paymentRoutes.js';
+import { handleStripeWebhook } from './controllers/paymentController.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middlewares : -> 
-// app.use(cors());
-app.use(express.json());
+
 app.use(cookieParser());
+// app.use(cors());
+app.post(
+  '/api/payments/webhook',
+  express.raw({ type: 'application/json' }),
+  handleStripeWebhook
+);//it needs raw request body, not the json body, hence defined before express.json()
+
+app.use(express.json());
+
 
 // Api routes : -> 
 app.get('/', (req, res) => {
@@ -39,7 +48,7 @@ const startServer = async () => {
         // This is the key line!
         // { alter: true } checks the current state of the database and then
         // performs the necessary changes in the tables to make it match the models.
-        await sequelize.sync({ alter: true });
+        await sequelize.sync();
         console.log("All Models are synchronized completely...");
         // Start the server only after syncing is complete
         app.listen(PORT, () => {

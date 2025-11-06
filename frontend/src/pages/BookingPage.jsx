@@ -85,7 +85,8 @@ const BookingPage = () => {
     const onSubmit = async (values) => {
     try {
       const total_fare = values.passengers.reduce((acc, p) => {
-        return acc + (p.seat_class === 'AC' ? train.fare_ac : train.fare_sleeper);
+        const price = (p.seat_class === 'AC' ? train.fare_ac : train.fare_sleeper);
+        return acc + parseFloat(price);
       }, 0);
 
       const bookingData = {
